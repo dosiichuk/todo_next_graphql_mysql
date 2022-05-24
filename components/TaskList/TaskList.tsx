@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import React from 'react';
 import { Task } from '../../generated/graphql-frontend';
+import TaskListItem from '../TaskListItem/TaskListItem';
 
 interface Props {
   tasks: Task[];
@@ -10,14 +10,7 @@ const TaskList: React.FC<Props> = ({ tasks }) => {
   return (
     <ul className="task-list">
       {tasks.map((task) => {
-        return (
-          <li className="task-list-item" key={task.id}>
-            <Link href="/update/[id]" as={`/update/${task.id}`}>
-              <a className="task-list-item-title">{task.title}</a>
-            </Link>
-            {task.status}
-          </li>
-        );
+        return <TaskListItem key={task.id} task={task} />;
       })}
     </ul>
   );

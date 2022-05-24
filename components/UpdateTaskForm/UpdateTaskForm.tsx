@@ -1,4 +1,5 @@
 import { isApolloError } from '@apollo/client';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useUpdateTaskMutation } from '../../generated/graphql-frontend';
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const UpdateTaskForm: React.FC<Props> = ({ id, initialValues }) => {
+  const router = useRouter();
   const [values, setValues] = useState<Values>(initialValues);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -21,7 +23,7 @@ const UpdateTaskForm: React.FC<Props> = ({ id, initialValues }) => {
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await updateTask({
+      const result = await updateTask({
         variables: {
           input: {
             id,
@@ -29,6 +31,9 @@ const UpdateTaskForm: React.FC<Props> = ({ id, initialValues }) => {
           },
         },
       });
+      if (result.data?.updateTask) {
+        router.push('/');
+      }
     } catch (err) {}
   };
   return (
